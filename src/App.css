@@ -1,0 +1,182 @@
+/* ── App shell ─────────────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 50px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.app-logo {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.app-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Tab toggle (used on mobile and as label on desktop) ─────────── */
+
+.tab-toggle {
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+}
+
+.tab-btn:hover {
+  color: var(--text-1);
+}
+
+.tab-btn--active {
+  background: var(--surface);
+  color: var(--text-1);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Main two-pane layout ────────────────────────────────────────── */
+
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.pane {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pane-editor {
+  width: 340px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+}
+
+.pane-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+  display: none; /* hidden – border on pane-editor does the job on desktop */
+}
+
+.pane-tree {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  background-image:
+    radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 10px 10px;
+}
+
+.tree-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Mobile: single-panel view ───────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pane-editor,
+  .pane-tree {
+    /* both take full main area; visibility toggled by class */
+    position: absolute;
+    inset: 50px 0 0;
+    width: 100%;
+    display: none;
+  }
+
+  .pane--active {
+    display: flex !important;
+  }
+
+  .app-main {
+    position: relative;
+  }
+
+  .pane-editor {
+    border-right: none;
+    width: 100%;
+  }
+
+  .pane-tree {
+    flex: none;
+    height: calc(100dvh - 50px);
+  }
+}
+
+/* ── Tablet: slightly narrower editor ─────────────────────────────── */
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .pane-editor {
+    width: 280px;
+  }
+
+  /* Keep toggle visible as an indicator but make it non-functional */
+  .tab-toggle {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+/* ── Desktop: always show both panes ─────────────────────────────── */
+
+@media (min-width: 641px) {
+  .pane-editor,
+  .pane-tree {
+    display: flex !important;
+  }
+}

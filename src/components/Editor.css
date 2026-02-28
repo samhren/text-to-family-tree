@@ -1,0 +1,161 @@
+/* ── Panel shell ───────────────────────────────────────────────── */
+
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/* ── Toolbar ───────────────────────────────────────────────────── */
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.editor-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.editor-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.editor-meta {
+  font-size: 11px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+}
+
+.toolbar-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-1);
+  background: var(--bg);
+}
+
+.toolbar-btn--active {
+  background: var(--accent-light);
+  border-color: #a5b4fc;
+  color: var(--accent);
+}
+
+.toolbar-btn--danger:hover {
+  border-color: #fca5a5;
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+/* ── Syntax help panel ─────────────────────────────────────────── */
+
+.editor-help {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fafbff;
+  flex-shrink: 0;
+}
+
+.help-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.help-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.help-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.help-code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.help-desc {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.help-note {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+
+.help-note code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--bg);
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+/* ── Textarea ──────────────────────────────────────────────────── */
+
+.editor-textarea {
+  flex: 1;
+  width: 100%;
+  padding: 14px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-1);
+  background: var(--surface);
+  border: none;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+  tab-size: 2;
+}
+
+.editor-textarea::placeholder {
+  color: var(--text-3);
+  opacity: 0.7;
+}

@@ -1,0 +1,206 @@
+/* ── Layout ─────────────────────────────────────────────────── */
+
+.family-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 32px 24px 48px;
+  min-width: max-content;
+}
+
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Person Cards ─────────────────────────────────────────────── */
+
+.node-card {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.person-card {
+  display: flex;
+  flex-direction: column;
+  padding: 9px 13px;
+  min-width: 88px;
+  max-width: 148px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.15s, border-color 0.15s;
+  cursor: default;
+  user-select: none;
+}
+
+.person-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+.person-card--partner {
+  background: var(--partner-bg);
+  border-color: var(--partner-border);
+}
+
+.person-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.person-card--partner .person-name {
+  color: var(--partner-text);
+}
+
+.person-dates {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Couple connector (heart icon) ───────────────────────────── */
+
+.couple-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-3);
+}
+
+/* ── Comment / section label ─────────────────────────────────── */
+
+.comment-node {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  background: var(--accent-light);
+  border-radius: 20px;
+  border: 1px solid #c7d2fe;
+  color: var(--accent);
+}
+
+/* ── Tree connector lines ─────────────────────────────────────── */
+
+/*
+  .children-area wraps the horizontal bar + children row.
+  Its ::before draws the vertical stem from parent down to the bar.
+*/
+.children-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.children-area::before {
+  content: '';
+  display: block;
+  width: 1.5px;
+  height: 20px;
+  background: var(--line-color);
+}
+
+.children-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+/*
+  Each child column reserves padding-top space for the connector lines.
+  ::after  → horizontal segment of the spanning bar
+  ::before → vertical drop from bar to child card
+*/
+.child-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  position: relative;
+  padding-top: 20px;
+}
+
+/* Horizontal segment */
+.child-col::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--line-color);
+}
+
+/* First child: bar starts at center */
+.child-col:first-child::after { left: 50%; }
+
+/* Last child: bar ends at center */
+.child-col:last-child::after  { right: 50%; }
+
+/* Only child: no horizontal bar (just the vertical drop) */
+.child-col:first-child:last-child::after { display: none; }
+
+/* Vertical drop */
+.child-col::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1.5px;
+  height: 20px;
+  background: var(--line-color);
+  transform: translateX(-50%);
+}
+
+/* ── Separator between multiple root trees ───────────────────── */
+
+.tree-separator {
+  width: 100%;
+  max-width: 320px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto;
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+
+.tree-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 10px;
+  color: var(--text-3);
+  padding: 40px;
+  text-align: center;
+}
+
+.tree-empty-icon {
+  opacity: 0.4;
+  margin-bottom: 4px;
+}
+
+.tree-empty-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.tree-empty-hint {
+  font-size: 13px;
+  color: var(--text-3);
+}
