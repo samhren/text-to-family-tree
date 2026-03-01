@@ -65,7 +65,7 @@
 
 .toolbar-btn--active {
   background: var(--accent-light);
-  border-color: #a5b4fc;
+  border-color: var(--border-strong);
   color: var(--accent);
 }
 
@@ -80,7 +80,7 @@
 .editor-help {
   padding: 12px 14px;
   border-bottom: 1px solid var(--border);
-  background: #fafbff;
+  background: var(--surface-2);
   flex-shrink: 0;
 }
 

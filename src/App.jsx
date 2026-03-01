@@ -1,57 +1,84 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { parseTree } from './parser.js';
 import { Editor } from './components/Editor.jsx';
 import { FamilyTree } from './components/FamilyTree.jsx';
 import './App.css';
 
-const EXAMPLE = `# The Harrison Family
+const EXAMPLE = `# Kappa Delta — Fall 2024 Chapter Families
 
-William Harrison (1918-1994) + Dorothy Mills (1922-2009)
-  Robert Harrison (1945) + Linda Chen (1948)
-    Sophie Harrison (1972) + Marcus Webb (1970)
-      Lily Webb (2001)
-      James Webb (2004)
-    Daniel Harrison (1975)
-  Carol Harrison (1948) + Frank Murphy (1945-2018)
-    Amy Murphy (1970) + Sean Doyle (1968)
-      Mia Doyle (2000)
-      Noah Doyle (2003)
-    Brian Murphy (1973) + Kate Novak (1975)
-      Zoe Murphy (2008)
-      Luke Murphy (2011)
+# The Johnson Family 
+Madison (Spring 2015)
+Olivia (Fall 2016)  big: Madison
+Chloe (Fall 2016)  big: Madison
+Sophia (Spring 2018)  big: Olivia
+Emma (Spring 2018)  big: Chloe
+Ava (Fall 2019)  big: Sophia
+Isabella (Fall 2019)  big: Emma
+Mia (Spring 2021)  big: Ava
+Charlotte (Spring 2021)  big: Isabella
+Harper (Fall 2022)  big: Mia, Charlotte
+Luna (Spring 2024)  big: Harper
 `;
 
-// Panel names for the mobile tab toggle
+function encode(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary);
+}
+
+function decode(encoded) {
+  try {
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  } catch {
+    return null;
+  }
+}
+
+function loadFromUrl() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return null;
+  return decode(hash);
+}
+
 const PANELS = ['editor', 'tree'];
 
 export default function App() {
-  const [code, setCode] = useState(EXAMPLE);
+  const [code, setCode] = useState(() => loadFromUrl() ?? EXAMPLE);
   const [activePanel, setActivePanel] = useState('tree');
 
-  const roots = useMemo(() => {
+  // Persist to URL on change (debounced)
+  useEffect(() => {
+    const id = setTimeout(() => {
+      window.history.replaceState(null, '', '#' + encode(code));
+    }, 400);
+    return () => clearTimeout(id);
+  }, [code]);
+
+  const { roots, extraConnections } = useMemo(() => {
     try {
       return parseTree(code);
     } catch {
-      return [];
+      return { roots: [], extraConnections: [] };
     }
   }, [code]);
 
   return (
     <div className="app">
-      {/* ── Header ── */}
       <header className="app-header">
         <div className="app-header-left">
           <div className="app-logo" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="4" r="3" fill="var(--accent)" />
-              <circle cx="4" cy="17" r="3" fill="var(--accent)" opacity="0.6" />
-              <circle cx="18" cy="17" r="3" fill="var(--accent)" opacity="0.6" />
-              <path d="M11 7v5M11 12l-7 5M11 12l7 5" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" />
+              <circle cx="11" cy="11" r="6.5" stroke="var(--accent)" strokeWidth="1.8" />
+              <line x1="11" y1="2" x2="11" y2="20" stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </div>
-          <h1 className="app-title">Family Tree Builder</h1>
+          <h1 className="app-title">Big/Little Family Tree</h1>
         </div>
-        {/* Mobile tab toggle */}
+
         <div className="tab-toggle" role="tablist">
           {PANELS.map((p) => (
             <button
@@ -66,7 +93,7 @@ export default function App() {
                   <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                     <path d="M1 3h11M1 6.5h7M1 10h9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
-                  Code
+                  Edit
                 </>
               ) : (
                 <>
@@ -84,7 +111,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── Main two-pane layout ── */}
       <main className="app-main">
         <div className={`pane pane-editor ${activePanel === 'editor' ? 'pane--active' : ''}`}>
           <Editor value={code} onChange={setCode} />
@@ -94,7 +120,7 @@ export default function App() {
 
         <div className={`pane pane-tree ${activePanel === 'tree' ? 'pane--active' : ''}`}>
           <div className="tree-scroll">
-            <FamilyTree roots={roots} />
+            <FamilyTree roots={roots} extraConnections={extraConnections} />
           </div>
         </div>
       </main>

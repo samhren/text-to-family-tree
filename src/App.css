@@ -123,8 +123,7 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  display: flex;
-  justify-content: center;
+  padding-bottom: 48px;
 }
 
 /* ── Mobile: single-panel view ───────────────────────────────────── */
@@ -134,8 +133,17 @@
   .pane-tree {
     /* both take full main area; visibility toggled by class */
     position: absolute;
-    inset: 50px 0 0;
+    inset: 0;
     width: 100%;
+    display: none;
+  }
+
+  /* Hide scrollbars on mobile — gesture scrolling handles navigation */
+  .tree-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .tree-scroll::-webkit-scrollbar {
     display: none;
   }
 
@@ -154,7 +162,6 @@
 
   .pane-tree {
     flex: none;
-    height: calc(100dvh - 50px);
   }
 }
 
